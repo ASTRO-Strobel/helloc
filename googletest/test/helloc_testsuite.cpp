@@ -9,7 +9,7 @@ int myapp_do_dangerous_io()
 {
 	return fake_register;
 }
-#include "myapp.c"
+#include <myapp.c>
 
 
 
