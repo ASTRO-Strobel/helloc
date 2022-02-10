@@ -1,9 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#define IOMEM_BASE 0x2FF
-#define VALUE_REG  (IOMEM_BASE + 3)
-
 // This must be a power of 2!
 #define BUFFER_SIZE 8
 #define MAX_ITEMS (BUFFER_SIZE-1)
@@ -23,9 +20,9 @@ void filter_add(int val) {
 #ifndef TESTING
 int myapp_do_dangerous_io()
 {
-	// lets dereference an io mapped register
-	// - on the target it is at address IOMEM_BASE + 3
-	return *((int *)VALUE_REG);
+	// we simulate the "dangerous io" here by returning a fixed value
+	// TODO: return a random value
+	return 5;
 }
 #endif
 
