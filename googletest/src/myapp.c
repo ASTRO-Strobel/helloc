@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <time.h>
 
 // This must be a power of 2!
 #define BUFFER_SIZE 8
@@ -7,7 +9,6 @@
 static int my_filter[BUFFER_SIZE];
 static int readIdx = 0;
 static int writeIdx = 0;
-
 
 int filter_len(){ return (BUFFER_SIZE + writeIdx - readIdx) % BUFFER_SIZE; }
 
@@ -20,9 +21,8 @@ void filter_add(int val) {
 #ifndef TESTING
 int myapp_do_dangerous_io()
 {
-	// we simulate the "dangerous io" here by returning a fixed value
-	// TODO: return a random value
-	return 5;
+	// we simulate the "dangerous io" here by returning a random value
+	return rand() % 5;
 }
 #endif
 
@@ -59,6 +59,9 @@ void myapp_mainloop()
 
 #ifndef TESTING
 int main() {
+	// initialize random  generator
+	srand( (unsigned int) time(NULL));  
+    
 	printf("!!!Hello World!!!\n");
 	myapp_mainloop();
 }
