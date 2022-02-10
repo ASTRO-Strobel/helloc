@@ -48,21 +48,33 @@ int myapp_task()
 	return myapp_get_average();
 }
 
-void myapp_mainloop()
+void myapp_mainloop(int loops)
 {
-	for(;;){
+	for(int i=0; i<loops; i++){
 		int nextloopdelay = myapp_task();
 		printf("sleeping %d seconds...\n", nextloopdelay);
 		sleep(nextloopdelay);
 	}
 }
 
+int facul(int f) {
+    if (f <= 0) return 1;
+    
+    int result = 1;
+    for (int i = f; i > 1; i--)
+        result *= i;
+    
+    return result;
+}
+
 #ifndef TESTING
 int main() {
 	// initialize random  generator
-	srand( (unsigned int) time(NULL));  
-    
+	srand( (unsigned int) time(NULL));
+	int random = rand() % 4;
+
+	int count = facul(random);
 	printf("!!!Hello World!!!\n");
-	myapp_mainloop();
+	myapp_mainloop(count);
 }
 #endif
