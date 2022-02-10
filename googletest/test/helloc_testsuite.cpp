@@ -1,9 +1,8 @@
-//#include <gtest/gtest.h>
 #include "gtest/gtest.h"
 
 // Hide main
 #define TESTING
-// Hide the io function since this will segfault in testing
+
 int fake_register;
 int myapp_do_dangerous_io()
 {
