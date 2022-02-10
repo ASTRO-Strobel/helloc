@@ -48,10 +48,11 @@ int myapp_task()
 	return myapp_get_average();
 }
 
-int myapp_mainloop()
+void myapp_mainloop()
 {
 	for(;;){
 		int nextloopdelay = myapp_task();
+		printf("sleeping %d seconds...\n", nextloopdelay);
 		sleep(nextloopdelay);
 	}
 }
@@ -59,6 +60,6 @@ int myapp_mainloop()
 #ifndef TESTING
 int main() {
 	printf("!!!Hello World!!!\n");
-	return myapp_mainloop();
+	myapp_mainloop();
 }
 #endif
