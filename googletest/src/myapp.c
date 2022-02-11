@@ -7,11 +7,16 @@
 
 
 #ifndef TESTING
+// this implementation is not wanted for the test
 int myapp_do_dangerous_io()
 {
     // we simulate the "dangerous io" here by returning a random value
     return rand() % 5;
 }
+#else 
+    // the forward declaration is needed for the test compilation run
+    // (the test code replaces the implementation)
+    int myapp_do_dangerous_io();
 #endif
 
 int myapp_task()
