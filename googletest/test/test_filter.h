@@ -1,6 +1,8 @@
 extern "C" {
     #include "filter.h"
 }
+
+// test fixture for the filter, which resets the filter on setup
 class FilterTestSuite : public testing::Test
 {
     void SetUp(){
@@ -12,8 +14,8 @@ class FilterTestSuite : public testing::Test
     void TearDown(){}
 };
 
-// forward declaration for mocked function, which shall be used in other
-// tests as well
+// forward declaration, because we want to use fake register (which is
+// part of the mocked implementation) in other tests as well
 extern "C" {
     extern int fake_register;
 }

@@ -7,6 +7,5 @@ extern int readIdx;
 extern int writeIdx;
 
 int filter_len();
-
 void filter_add(int val);
 int filter_get_average();

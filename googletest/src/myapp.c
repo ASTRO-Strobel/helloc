@@ -7,7 +7,8 @@
 
 
 #ifndef TESTING
-// this implementation is not wanted for the test
+// this implementation is not wanted for the test, so the test build
+// can avoid it by defining TESTING at the compiler commandline
 int myapp_do_dangerous_io()
 {
     // we simulate the "dangerous io" here by returning a random value

@@ -6,8 +6,8 @@ extern "C" {
     #include <myapp.h>
     #include <filter.h>
 
-    // forward declarations for private functions, which are not included
-    // in the public header files
+    // forward declaration for a private function in myapp.c, which is
+    // not included in the public header files
     int myapp_task();
 }
 
