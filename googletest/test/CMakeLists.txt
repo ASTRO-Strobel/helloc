@@ -6,5 +6,5 @@ set(SOURCES ${PROJECT_SOURCE_DIR}/src/)
 include_directories("${SOURCES}")
 
 add_executable(${TESTNAME} helloc_testsuite.cpp)
-target_compile_options(${TESTNAME} PRIVATE -Wall -Wextra -Werror)
+target_compile_options(${TESTNAME} PRIVATE -Wall -Wextra -Werror -DTESTING)
 target_link_libraries(${TESTNAME} gtest gmock gtest_main)

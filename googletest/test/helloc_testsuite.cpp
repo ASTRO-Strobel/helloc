@@ -1,7 +1,5 @@
 #include "gtest/gtest.h"
 
-// Hide main
-#define TESTING
 
 int fake_register;
 int myapp_do_dangerous_io()
