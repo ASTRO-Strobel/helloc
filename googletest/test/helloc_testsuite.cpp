@@ -1,35 +1,21 @@
 #include "gtest/gtest.h"
 
+extern "C" {
+    #include <myapp.h>
+    #include <filter.h>
 
-int fake_register;
-int myapp_do_dangerous_io()
-{
-    return fake_register;
-}
-#include <myapp.c>
-#include <filter.c>
-#include <facul.c>
+    // forward declarations for private functions, which are not included
+    // in the public header files
+    int myapp_task();
 
-// test facul function
-class FaculTest :
-    public testing::TestWithParam<std::tuple<int, int>> {
-};
-TEST_P(FaculTest, test_facul) {
-    int value = std::get<0>(GetParam());
-    int expected = std::get<1>(GetParam());
-    EXPECT_EQ(facul(value), expected);
+    // we need to "mock" myapp_do_dangerous_io, so we declare a special
+    // implementation for the test here (the original is excluded via
+    // the preprocessor define "TESTING")
+    int fake_register;
+    int myapp_do_dangerous_io() {
+        return fake_register;
+    }
 }
-INSTANTIATE_TEST_SUITE_P(
-    FaculTestSuite,
-    FaculTest,
-    testing::Values(
-        std::make_tuple(0, 1),
-        std::make_tuple(1, 1),
-        std::make_tuple(2, 2),
-        std::make_tuple(3, 6),
-        std::make_tuple(4, 24)
-    )
-);
 
 
 // test filter
