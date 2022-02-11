@@ -41,6 +41,6 @@ void myapp_run() {
     int random = rand() % 4;
 
     int count = facul(random);
-    printf("!!!Hello World!!!\n");
+    printf("Starting %d loops\n", count);
     myapp_mainloop(count);
 }
