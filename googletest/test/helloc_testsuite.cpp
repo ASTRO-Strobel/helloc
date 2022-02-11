@@ -9,6 +9,8 @@ int myapp_do_dangerous_io()
     return fake_register;
 }
 #include <myapp.c>
+#include <filter.c>
+#include <facul.c>
 
 // test facul function
 class FaculTest :
@@ -57,7 +59,7 @@ TEST_F(MyAppTestSuite, myapp_task_should_return_correct_delay_for_two_elements) 
 }
 
 TEST_F(MyAppTestSuite, get_average_should_return_zero_on_empty_filter) {
-    ASSERT_EQ(0, myapp_get_average());
+    ASSERT_EQ(0, filter_get_average());
 }
 
 TEST_F(MyAppTestSuite, addFirstFilterValAddsVal) {
@@ -67,28 +69,28 @@ TEST_F(MyAppTestSuite, addFirstFilterValAddsVal) {
 
 TEST_F(MyAppTestSuite, addFirstReturnsCorrectAverage) {
     filter_add(42);
-    ASSERT_EQ(42, myapp_get_average());
+    ASSERT_EQ(42, filter_get_average());
 }
 
 
 TEST_F(MyAppTestSuite, addTwoValuesReturnsCorrectAverage) {
     filter_add(42);
     filter_add(40);
-    ASSERT_EQ(41, myapp_get_average());
+    ASSERT_EQ(41, filter_get_average());
 }
 
 TEST_F(MyAppTestSuite, get_average_should_return_average_of_full_filter) {
     for(int i = 0; i < MAX_ITEMS; i++){
         filter_add(i);
     }
-    ASSERT_EQ((0+1+2+3+4+5+6)/MAX_ITEMS, myapp_get_average());
+    ASSERT_EQ((0+1+2+3+4+5+6)/MAX_ITEMS, filter_get_average());
 }
 
 TEST_F(MyAppTestSuite, get_average_should_return_average_of_wrapped_filter) {
     for(int i = 0; i < BUFFER_SIZE; i++){
         filter_add(i);
     }
-    ASSERT_EQ((1+2+3+4+5+6+7)/MAX_ITEMS, myapp_get_average());
+    ASSERT_EQ((1+2+3+4+5+6+7)/MAX_ITEMS, filter_get_average());
 }
 
 /// ....test buffer operations...
