@@ -1,4 +1,4 @@
-#include <catch2/catch_test_macros.hpp>
+#include <catch.hpp>
 
 #include "test_filter.h"
 extern "C" {
@@ -11,9 +11,10 @@ extern "C" {
     }
 }
 
-TEST_CASE("Test the filter", "[filter]") {
-    FilterTestFixture filter_test_fixture = FilterTestFixture();
-    filter_test_fixture.set_up();
+
+FilterTestFixture filter_test_fixture1 = FilterTestFixture();
+TEST_CASE("Test the filter1", "[filter]") {
+    filter_test_fixture1.set_up();
 
     SECTION("get_average_should_return_zero_on_empty_filter") {
         REQUIRE(0 == filter_get_average());
@@ -23,7 +24,12 @@ TEST_CASE("Test the filter", "[filter]") {
         filter_add(42);
         REQUIRE(42 == my_filter[readIdx]);
     }
+}
+    
 
+FilterTestFixture filter_test_fixture2 = FilterTestFixture();
+TEST_CASE("Test the filter2", "[filter]") {
+    filter_test_fixture2.set_up();
     SECTION("addFirstReturnsCorrectAverage") {
         filter_add(42);
         REQUIRE(42 ==filter_get_average());

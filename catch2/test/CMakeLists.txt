@@ -1,11 +1,12 @@
-add_subdirectory("${PROJECT_SOURCE_DIR}/extern/catch2" "extern/catch2")
+set(CATCH_BUILD_STATIC_LIBRARY ON)
+add_subdirectory(${PROJECT_SOURCE_DIR}/extern/catch2 extern/catch2)
 
 set(TESTNAME test_myapp)
 set(SOURCES ${PROJECT_SOURCE_DIR}/src/)
 
 include_directories(
     ${SOURCES}
-    ${PROJECT_SOURCE_DIR}/extern/catch2
+    ${PROJECT_SOURCE_DIR}/extern/catch2/include
 )
 
 add_executable(${TESTNAME} 
