@@ -1,3 +1,5 @@
+#include <string.h>
+
 extern "C" {
     #include "filter.h"
 }
