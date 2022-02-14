@@ -1,4 +1,4 @@
-#include <catch2/catch_test_macros.hpp>
+#include "doctest/doctest.h"
 
 #include "test_filter.h"
 
@@ -12,16 +12,16 @@ extern "C" {
 }
 
 
-TEST_CASE("Test the app", "[app]") {
+TEST_CASE("Test the app") {
     FilterTestFixture filter_test_fixture = FilterTestFixture();
     filter_test_fixture.set_up();
 
-    SECTION("myapp_task_should_return_correct_delay_for_one_element") {
+    SUBCASE("myapp_task_should_return_correct_delay_for_one_element") {
         fake_register = 10;
         REQUIRE(10 == myapp_task());
     }
 
-    SECTION("myapp_task_should_return_correct_delay_for_two_elements") {
+    SUBCASE("myapp_task_should_return_correct_delay_for_two_elements") {
         fake_register = 10;
         myapp_task();
         fake_register = 20;
