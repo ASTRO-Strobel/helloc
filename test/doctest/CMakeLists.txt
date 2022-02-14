@@ -1,6 +1,6 @@
 add_subdirectory("${PROJECT_SOURCE_DIR}/extern/doctest" "extern/doctest")
 
-set(TESTNAME test_myapp)
+set(TESTNAME test_doctest)
 set(SOURCES ${PROJECT_SOURCE_DIR}/src/)
 
 include_directories(

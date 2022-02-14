@@ -1,9 +1,11 @@
 add_subdirectory("${PROJECT_SOURCE_DIR}/extern/googletest" "extern/googletest")
 
-set(TESTNAME test_myapp)
+set(TESTNAME test_googletest)
 set(SOURCES ${PROJECT_SOURCE_DIR}/src/)
 
-include_directories("${SOURCES}")
+include_directories(
+    ${SOURCES}
+)
 
 add_executable(${TESTNAME} 
     ${SOURCES}/myapp.c 

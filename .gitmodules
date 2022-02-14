@@ -1,9 +1,9 @@
-[submodule "googletest/extern/googletest"]
-	path = googletest/extern/googletest
+[submodule "extern/googletest"]
+	path = extern/googletest
 	url = https://github.com/google/googletest.git
-[submodule "catch2/extern/catch2"]
-	path = catch2/extern/catch2
+[submodule "extern/catch2"]
+	path = extern/catch2
 	url = https://github.com/catchorg/Catch2.git
-[submodule "doctest/extern/doctest"]
-	path = doctest/extern/doctest
+[submodule "extern/doctest"]
+	path = extern/doctest
 	url = https://github.com/doctest/doctest.git
