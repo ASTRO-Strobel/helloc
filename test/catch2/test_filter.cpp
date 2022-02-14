@@ -12,9 +12,9 @@ extern "C" {
 }
 
 
-FilterTestFixture filter_test_fixture1 = FilterTestFixture();
-TEST_CASE("Test the filter1", "[filter]") {
-    filter_test_fixture1.set_up();
+FilterTestFixture filter_test_fixture = FilterTestFixture();
+TEST_CASE("Test the filter", "[filter]") {
+    filter_test_fixture.set_up();
 
     SECTION("get_average_should_return_zero_on_empty_filter") {
         REQUIRE(0 == filter_get_average());
@@ -24,17 +24,11 @@ TEST_CASE("Test the filter1", "[filter]") {
         filter_add(42);
         REQUIRE(42 == my_filter[readIdx]);
     }
-}
-    
 
-FilterTestFixture filter_test_fixture2 = FilterTestFixture();
-TEST_CASE("Test the filter2", "[filter]") {
-    filter_test_fixture2.set_up();
     SECTION("addFirstReturnsCorrectAverage") {
         filter_add(42);
         REQUIRE(42 ==filter_get_average());
     }
-
 
     SECTION("addTwoValuesReturnsCorrectAverage") {
         filter_add(42);
