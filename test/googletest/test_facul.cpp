@@ -7,11 +7,16 @@ extern "C" {
 // test facul function
 class FaculTest :
     public testing::TestWithParam<std::tuple<int, int>> {
+        protected:
+        int get_value() {
+            return std::get<0>(GetParam());
+        }
+        int get_expected() {
+            return std::get<1>(GetParam());
+        }
 };
 TEST_P(FaculTest, test_facul) {
-    int value = std::get<0>(GetParam());
-    int expected = std::get<1>(GetParam());
-    EXPECT_EQ(facul(value), expected);
+    EXPECT_EQ(facul(get_value()), get_expected());
 }
 INSTANTIATE_TEST_SUITE_P(
     FaculTestSuite,
