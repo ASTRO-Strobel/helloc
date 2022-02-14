@@ -4,3 +4,6 @@
 [submodule "catch2/extern/catch2"]
 	path = catch2/extern/catch2
 	url = https://github.com/catchorg/Catch2.git
+[submodule "doctest/extern/doctest"]
+	path = doctest/extern/doctest
+	url = https://github.com/doctest/doctest.git
