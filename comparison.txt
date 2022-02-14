@@ -1,0 +1,166 @@
+Comparison googletest, catch2, doctest
+======================================
+
+1. Parametrized Tests
+------------------
+a) googletest
+// setup in 3 steps:
+// define a fixture class
+class FaculTest :
+    public testing::TestWithParam<std::tuple<int, int>> {
+        protected:
+        int get_value() {
+            return std::get<0>(GetParam());
+        }
+        int get_expected() {
+            return std::get<1>(GetParam());
+        }
+};
+// define the test
+TEST_P(FaculTest, test_facul) {
+    EXPECT_EQ(facul(get_value()), get_expected());
+}
+// instantiate the test with parameters
+INSTANTIATE_TEST_SUITE_P(
+    FaculTestSuite,
+    FaculTest,
+    testing::Values(
+        std::make_tuple(0, 1),
+        std::make_tuple(1, 1),
+        std::make_tuple(2, 2),
+        std::make_tuple(3, 6),
+        std::make_tuple(4, 24)
+    )
+
+b) catch2
+// much simpler setup using the GENERATE macro
+TEST_CASE("Test the facul function", "[facul]") {
+    auto val_exp = GENERATE(
+        std::make_tuple(0, 1),
+        std::make_tuple(1, 1),
+        std::make_tuple(2, 2),
+        std::make_tuple(3, 6),
+        std::make_tuple(4, 24)
+        );
+    int value = std::get<0>(val_exp);
+    int expected = std::get<1>(val_exp);
+
+    REQUIRE(facul(value) == expected);
+}
+
+// recursive parametrization using sections
+// the following generates 2 * 2 section "one" tests and 
+//                         2 * 2 * 3 = 12 section "two" tests
+TEST_CASE("Generators") {
+    auto i = GENERATE(1, 2);
+    SECTION("one") {
+        auto j = GENERATE(-3, -2);
+        REQUIRE(j < i);
+    }
+
+    auto k = GENERATE(2, 7);
+    SECTION("two") {
+        auto l = GENERATE(4, 5, 6);
+        REQUIRE(l != k);
+        REQUIRE(i != l);
+    }
+}
+
+c) doctest
+// currently not supported (maybe in upcoming 2.5)
+// workaround with DOCTEST_VALUE_PARAMETERIZED_DATA macro:
+TEST_CASE("Test the facul function") {
+    std::list<std::tuple<int, int>> params = {
+        std::make_tuple(0, 1),
+        std::make_tuple(1, 1),
+        std::make_tuple(2, 2),
+        std::make_tuple(3, 6),
+        std::make_tuple(4, 24)
+    }; // must be iterable - std::vector<> would work as well
+
+    std::tuple<int, int> val_exp;
+    DOCTEST_VALUE_PARAMETERIZED_DATA(val_exp, params);
+
+    int value = std::get<0>(val_exp);
+    int expected = std::get<1>(val_exp);
+    CHECK(facul(value) == expected);
+}
+
+=> catch 2 wins
+
+
+2. Test Fixtures
+-------------
+a) googletest
+// supports a test fixture class with SetUp, TearDown, SetUpTestSuite,
+// TearDownTestSuite
+// from which a class is derived and instantiated for every test
+class FilterTestSuite : public testing::Test
+{
+    void SetUp() {
+        memset(&my_filter, 0, sizeof(my_filter));
+        readIdx = 0;
+        writeIdx = 0;
+    }
+
+    void TearDown() {}
+    private:
+    void custiom() {}
+};
+
+TEST_F(FilterTestSuite, get_average_should_return_zero_on_empty_filter) {
+    custom(); // we can use the custom function here
+    ASSERT_EQ(0, filter_get_average());
+}
+
+b) catch2
+// provides test fixtures, which work similarly as in google test, but lack
+// the SetUpTestSuite / TearDownTestSuite methods
+class FilterTestFixture {
+    public:
+    FilterTestFixture() {
+        memset(&my_filter, 0, sizeof(my_filter));
+        readIdx = 0;
+        writeIdx = 0;
+    }
+};
+TEST_CASE_METHOD(FilterTestFixture, "get_average_should_return_zero_on_empty_filter", "[filter]") {
+    REQUIRE(0 == filter_get_average());
+}   
+
+TEST_CASE_METHOD(FilterTestFixture, "addFirstFilterValAddsVal", "[filter]") {
+    filter_add(42);
+    REQUIRE(42 == my_filter[readIdx]);
+}
+
+
+// alternatively, the SECTIONS scheme may be used for setup code:
+TEST_CASE( "vectors can be sized and resized", "[vector]" ) {
+    // setup code, which ist executed separately for every following section
+    std::vector<int> v( 5 );
+
+    REQUIRE( v.size() == 5 );
+    REQUIRE( v.capacity() >= 5 );
+
+    SECTION( "resizing bigger changes size and capacity" ) {
+        v.resize( 10 );
+
+        REQUIRE( v.size() == 10 );
+        REQUIRE( v.capacity() >= 10 );
+    }
+    SECTION( "resizing smaller changes size but not capacity" ) {
+        v.resize( 0 );
+
+        REQUIRE( v.size() == 0 );
+        REQUIRE( v.capacity() >= 5 );
+    }
+    
+    //tear down code can be placed here
+}
+
+c) doctest
+// very similar to catch2:
+// TEST_CASE_FIXTURE instead of TEST_CASE_METHOD
+// SUBCASE instead of SECTION
+
+=> googletest offers SetUpTestSuite/TearDownTestSuite, which seems to be missing in catch2 and doctest
