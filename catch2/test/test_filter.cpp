@@ -1,7 +1,6 @@
-#include "gtest/gtest.h"
+#include <catch2/catch_test_macros.hpp>
 
 #include "test_filter.h"
-
 extern "C" {
     // we need to "mock" myapp_do_dangerous_io, so we declare a special
     // implementation for the test here (the original is excluded via
@@ -12,81 +11,85 @@ extern "C" {
     }
 }
 
+TEST_CASE("Test the filter", "[filter]") {
+    FilterTestFixture filter_test_fixture = FilterTestFixture();
+    filter_test_fixture.set_up();
 
-TEST_F(FilterTestSuite, get_average_should_return_zero_on_empty_filter) {
-    ASSERT_EQ(0, filter_get_average());
-}
+    SECTION("get_average_should_return_zero_on_empty_filter") {
+        REQUIRE(0 == filter_get_average());
+    }   
 
-TEST_F(FilterTestSuite, addFirstFilterValAddsVal) {
-    filter_add(42);
-    ASSERT_EQ(42, my_filter[readIdx]);
-}
-
-TEST_F(FilterTestSuite, addFirstReturnsCorrectAverage) {
-    filter_add(42);
-    ASSERT_EQ(42, filter_get_average());
-}
-
-
-TEST_F(FilterTestSuite, addTwoValuesReturnsCorrectAverage) {
-    filter_add(42);
-    filter_add(40);
-    ASSERT_EQ(41, filter_get_average());
-}
-
-TEST_F(FilterTestSuite, get_average_should_return_average_of_full_filter) {
-    for(int i = 0; i < MAX_ITEMS; i++){
-        filter_add(i);
+    SECTION("addFirstFilterValAddsVal") {
+        filter_add(42);
+        REQUIRE(42 == my_filter[readIdx]);
     }
-    ASSERT_EQ((0+1+2+3+4+5+6)/MAX_ITEMS, filter_get_average());
-}
 
-TEST_F(FilterTestSuite, get_average_should_return_average_of_wrapped_filter) {
-    for(int i = 0; i < BUFFER_SIZE; i++){
-        filter_add(i);
+    SECTION("addFirstReturnsCorrectAverage") {
+        filter_add(42);
+        REQUIRE(42 ==filter_get_average());
     }
-    ASSERT_EQ((1+2+3+4+5+6+7)/MAX_ITEMS, filter_get_average());
-}
+
+
+    SECTION("addTwoValuesReturnsCorrectAverage") {
+        filter_add(42);
+        filter_add(40);
+        REQUIRE(41 == filter_get_average());
+    }
+
+    SECTION("get_average_should_return_average_of_full_filter") {
+        for(int i = 0; i < MAX_ITEMS; i++){
+            filter_add(i);
+        }
+        REQUIRE((0+1+2+3+4+5+6)/MAX_ITEMS == filter_get_average());
+    }
+
+    SECTION("get_average_should_return_average_of_wrapped_filter") {
+        for(int i = 0; i < BUFFER_SIZE; i++){
+            filter_add(i);
+        }
+        REQUIRE((1+2+3+4+5+6+7)/MAX_ITEMS == filter_get_average());
+    }
 
 /// ....test buffer operations...
 
 
-TEST_F(FilterTestSuite, addFirstFilterValIncsWriteIdx) {
-    filter_add(42);
-    ASSERT_EQ(writeIdx, 1);
-    ASSERT_EQ(1,filter_len());
-}
+    SECTION("addFirstFilterValIncsWriteIdx") {
+        filter_add(42);
+        REQUIRE(writeIdx == 1);
+        REQUIRE(1 == filter_len());
+    }
 
-TEST_F(FilterTestSuite, addFilterValWrapsWriteIdx) {
-    for(int i = 0; i < BUFFER_SIZE; i++){
-        filter_add(i);
+    SECTION("addFilterValWrapsWriteIdx") {
+        for(int i = 0; i < BUFFER_SIZE; i++){
+            filter_add(i);
+        }
+        REQUIRE(0 == writeIdx);
     }
-    ASSERT_EQ(0, writeIdx);
-}
 
-TEST_F(FilterTestSuite, addFilterValUpdatesReadIndex) {
-    for(int i = 0; i < BUFFER_SIZE; i++){
-        filter_add(i);
+    SECTION("addFilterValUpdatesReadIndex") {
+        for(int i = 0; i < BUFFER_SIZE; i++){
+            filter_add(i);
+        }
+        REQUIRE(readIdx == 1);
+        REQUIRE(MAX_ITEMS == filter_len());
     }
-    ASSERT_EQ(readIdx, 1);
-    ASSERT_EQ(MAX_ITEMS, filter_len());
-}
 
-TEST_F(FilterTestSuite, addFilterValWrapsReadIndex) {
-    for(int i = 0; i < BUFFER_SIZE; i++){
-        filter_add(i);
+    SECTION("addFilterValWrapsReadIndex") {
+        for(int i = 0; i < BUFFER_SIZE; i++){
+            filter_add(i);
+        }
+        for(int i = 0; i < BUFFER_SIZE-1; i++){
+            filter_add(i);
+        }
+        REQUIRE(readIdx == 0);
+        REQUIRE(MAX_ITEMS == filter_len());
     }
-    for(int i = 0; i < BUFFER_SIZE-1; i++){
-        filter_add(i);
-    }
-    ASSERT_EQ(readIdx, 0);
-    ASSERT_EQ(MAX_ITEMS, filter_len());
-}
 
-TEST_F(FilterTestSuite, addFilterValGivesCorrectLen) {
-    for(int i = 0; i < BUFFER_SIZE; i++){
-        filter_add(i);
+    SECTION("addFilterValGivesCorrectLen") {
+        for(int i = 0; i < BUFFER_SIZE; i++){
+            filter_add(i);
+        }
+        REQUIRE(readIdx == 1);
+        REQUIRE(MAX_ITEMS == filter_len());
     }
-    ASSERT_EQ(readIdx, 1);
-    ASSERT_EQ(MAX_ITEMS, filter_len());
 }

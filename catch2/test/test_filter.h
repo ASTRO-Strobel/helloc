@@ -3,15 +3,13 @@ extern "C" {
 }
 
 // test fixture for the filter, which resets the filter on setup
-class FilterTestSuite : public testing::Test
-{
-    void SetUp(){
+class FilterTestFixture {
+    public:
+    void set_up() {
         memset(&my_filter, 0, sizeof(my_filter));
         readIdx = 0;
         writeIdx = 0;
     }
-
-    void TearDown(){}
 };
 
 // forward declaration, because we want to use fake register (which is
