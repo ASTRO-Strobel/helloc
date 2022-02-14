@@ -1,4 +1,4 @@
-#include "gtest/gtest.h"
+#include <catch2/catch_test_macros.hpp>
 
 #include "test_filter.h"
 
@@ -12,17 +12,19 @@ extern "C" {
 }
 
 
-class MyAppTestSuite : public FilterTestSuite {
-};
+TEST_CASE("Test the app", "[app]") {
+    FilterTestFixture filter_test_fixture = FilterTestFixture();
+    filter_test_fixture.set_up();
 
-TEST_F(MyAppTestSuite, myapp_task_should_return_correct_delay_for_one_element) {
-    fake_register = 10;
-    EXPECT_EQ(10, myapp_task());
-}
+    SECTION("myapp_task_should_return_correct_delay_for_one_element") {
+        fake_register = 10;
+        REQUIRE(10 == myapp_task());
+    }
 
-TEST_F(MyAppTestSuite, myapp_task_should_return_correct_delay_for_two_elements) {
-    fake_register = 10;
-    myapp_task();
-    fake_register = 20;
-    EXPECT_EQ(15, myapp_task());
+    SECTION("myapp_task_should_return_correct_delay_for_two_elements") {
+        fake_register = 10;
+        myapp_task();
+        fake_register = 20;
+        REQUIRE(15 == myapp_task());
+    }
 }
